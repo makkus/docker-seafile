@@ -37,8 +37,8 @@ seafile:
 
 
 nginx:
-  restart: always
   build: nginx
+  restart: always
   links:
     - seafile
   volumes_from:
