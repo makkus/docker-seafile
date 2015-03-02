@@ -37,6 +37,7 @@ seafile:
 
 
 nginx:
+  restart: always
   build: nginx
   links:
     - seafile
