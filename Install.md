@@ -16,7 +16,7 @@ Check out this repository, then enter the ```docker-seafile``` folder:
 
 ## Initial config
 
-	In the editor of your choice, open 'docker-compose.yml' to edit:
+In the editor of your choice, open 'docker-compose.yml' to edit:
 
 ### Volumes
 
