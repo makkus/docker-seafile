@@ -34,6 +34,7 @@ to the file */etc/hosts*. Use **localhost.home** as the hostname when asked, and
     ...
     ...
     firefox https://localhost.home/seafile
+    (accept insecure host cert when browser warns)
 
 ## TODO
 
