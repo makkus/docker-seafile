@@ -11,7 +11,6 @@ The setup consists of a data-only container, which encapsulates all volumes for 
    - preconfigured webdav
  - configurable cron-job for garbage collection
  - configurable cron-job for backup
- - simplify services files
 
 ## Documentation
 
@@ -45,6 +44,7 @@ to the file */etc/hosts*. Use **localhost.home** as the hostname when asked, and
  - configurable cron jobs
  - configurable backup scripts
  - remove old backups
+ - revisit/simplify services/runit start files
 
 ## Thanks
 
