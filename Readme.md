@@ -33,7 +33,7 @@ to the file */etc/hosts*. Use **localhost.home** as the hostname when asked, and
     <answer all the questions>
     ...
     ...
-    firefox http://<your_choosen_hostname>/<your_chosen_path>
+    firefox https://localhost.home/seafile
 
 ## TODO
 
