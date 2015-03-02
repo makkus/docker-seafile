@@ -17,6 +17,17 @@ The setup consists of a data-only container, which encapsulates all volumes for 
  - [Configure/Install](https://github.com/makkus/docker-seafile/blob/master/Install.md)
  - [Overview](https://github.com/makkus/docker-seafile/blob/master/Overview.md)
 
+## Quickstart
+
+    git clone https://github.com/makkus/docker-seafile.git
+    cd docker-seafile
+    ./first-time-setup.sh
+    ...
+    ...
+    <answer all the questions>
+    ...
+    ...
+    firefox http://<your_choosen_hostname>/<your_chosen_path>
 
 ## TODO
 
