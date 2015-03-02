@@ -23,22 +23,22 @@ In the editor of your choice, open 'docker-compose.yml' to edit:
 All volumes are defined in the *data* container. You don't have to change any of those, in which case all the data will be stored in the docker data container itself:
 
     volumes:
-        - /etc/timezone:/etc/timezone:ro
-        - /etc/localtime:/etc/localtime:ro
-        - /var/lib/mysql
-        - /var/lib/seafile-data
-        - /opt/seafile
-        - /backup
+     - /etc/timezone:/etc/timezone:ro
+     - /etc/localtime:/etc/localtime:ro
+     - /var/lib/mysql
+     - /var/lib/seafile-data
+     - /opt/seafile
+     - /backup
 
 Or, you could map some or all of the volumes to directories on your host system, like so:
 
     volumes:
-	- /etc/timezone:/etc/timezone:ro
-	- /etc/localtime:/etc/localtime:ro
-	- /home/markus/docker/seafile/db:/var/lib/mysql
-	- /home/markus/docker/seafile/seafile-data:/var/lib/seafile-data
-	- /home/markus/docker/seafile/seafile:/opt/seafile
-	- /home/markus/docker/seafile/backup:/backup
+     - /etc/timezone:/etc/timezone:ro
+     - /etc/localtime:/etc/localtime:ro
+     - /home/markus/docker/seafile/db:/var/lib/mysql
+     - /home/markus/docker/seafile/seafile-data:/var/lib/seafile-data
+     - /home/markus/docker/seafile/seafile:/opt/seafile
+     - /home/markus/docker/seafile/backup:/backup
 
 ### Environment variables
 
