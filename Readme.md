@@ -19,6 +19,12 @@ The setup consists of a data-only container, which encapsulates all volumes for 
 
 ## Quickstart
 
+For this quickstart to work, you need to add the line:
+
+    127.0.0.1     localhost.home
+   
+to the file */etc/hosts*. Use **localhost.home** as the hostname when asked, and answer the rest of the questions according to [the config section here](https://github.com/makkus/docker-seafile/blob/master/Install.md#first-run).
+
     git clone https://github.com/makkus/docker-seafile.git
     cd docker-seafile
     ./first-time-setup.sh
