@@ -11,6 +11,7 @@ The setup consists of a data-only container, which encapsulates all volumes for 
    - preconfigured webdav
  - configurable cron-job for garbage collection
  - configurable cron-job for backup
+ - simplify services files
 
 ## Documentation
 
