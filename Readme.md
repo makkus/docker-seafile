@@ -27,7 +27,7 @@ to the file */etc/hosts*. Use **localhost.home** as the hostname when asked, and
 
     git clone https://github.com/makkus/docker-seafile.git
     cd docker-seafile
-    ./first-time-setup.sh
+    sudo ./first-time-setup.sh
     ...
     ...
     <answer all the questions>
