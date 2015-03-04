@@ -76,7 +76,7 @@ Execute the *first-time-setup.sh* script. This script will delete all potentiall
 
 Anyway, run:
 
-    ./first-time-setup.sh
+    sudo ./first-time-setup.sh
 
 If no certificate is in the *nginx/certs* folder, a self-signed one will be created. Answer the questions asked, the only vaguely important one is the "Common name", where you will have to enter your host name for the service. 
 
