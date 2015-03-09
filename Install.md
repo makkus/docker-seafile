@@ -39,6 +39,16 @@ Or, you could map some or all of the volumes to directories on your host system,
      - /home/markus/docker/seafile/seafile-data:/var/lib/seafile-data
      - /home/markus/docker/seafile/seafile:/opt/seafile
      - /home/markus/docker/seafile/backup:/backup
+     
+In that case you need to make sure for those directories to have the right permissions. If you don't care too much, you can just do:
+
+    chmod -R 777 <db_dir> <data_dir> <seafile_dir> <backup_dir>
+    
+or, if you want to have permissions a bit tighter, do:
+
+    sudo chown -R 102:105 <db_dir>
+    sudo chown -R 2000:2000 <data_dir> <seafile_dir> <backup_dir>
+    
 
 ### Environment variables
 
