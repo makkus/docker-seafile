@@ -1,6 +1,17 @@
 #!/bin/sh
 
-if [ ! "$ENABLE_BACKUP" = "True" ]
+OPTIND=1
+FORCE_BACKUP="False"
+
+while getopts "f" opt; do
+        case "$opt" in
+        f) FORCE_BACKUP="True"
+        ;;
+        esac
+done
+
+
+if [ ! "$ENABLE_BACKUP" = "True" ] && [ ! "$FORCE_BACKUP" = "True" ];
 then
 		echo "Backup not enabled, exiting..."
 		exit 0

@@ -1,5 +1,12 @@
 #!/bin/bash
 
+if [ ! -e docker-compose.yml ]
+then
+	echo "No docker-compose.yml file, copying and using example..."
+	cp docker-compose.yml.example docker-compose.yml
+fi
+
+
 echo "Stopping all potentially running containers..."
 docker-compose stop
 echo "Removing all potentially existing containers and volumes..."
@@ -16,6 +23,7 @@ else
 		openssl req -new -x509 -key nginx/certs/privkey.pem -out nginx/certs/cacert.pem -days 1095
 		echo "Certificate created and put into 'nginx/certs'"
 fi
+
 
 echo "(Re-)Building images"
 docker-compose build --no-cache
