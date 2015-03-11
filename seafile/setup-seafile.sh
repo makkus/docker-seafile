@@ -113,6 +113,8 @@ then
 		fi
 fi
 
+chmod o-r /opt/seafile/seahub_settings.py
+
 echo "Everything setup. The url of your installation is: 'https://${SEAFILE_HOSTNAME}/${SEAFILE_SITE_ROOT}'"
 
 # TODO run all the checks again?
