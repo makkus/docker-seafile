@@ -27,8 +27,8 @@ ADD create_db.sql /opt/scripts/create_db.sql
 ADD garbage_collection.sh /opt/scripts/seafile-gc
 ADD backup.sh /opt/scripts/seafile-backup
 # create seafile & backup user
-ADD prepare-volumes.sh /tmp/prepare-volumes.sh
-RUN /tmp/prepare-volumes.sh
+ADD prepare-user.sh /tmp/prepare-user.sh
+RUN /tmp/prepare-user.sh
 
 ADD backup_schedule.sh /etc/cron.d/backup_schedule.sh
 ADD garbage_collection_schedule.sh /etc/cron.d/garbage_collection_schedule.sh

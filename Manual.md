@@ -2,12 +2,23 @@
 
 The services don't use root to run (except ), but non-privileged user accounts. Here is a list of users and groups, along with uids and gids (useful for preparing folders mapped to volumes):
 
-| User     | uid  |Default group (& gid) | 
-|----------|------|----------------------|
-| mysql    | 102  | mysql (105)          | 
-| seafile  | 2000 | seafile (2000)       |
-| www-data | 33   | www-data (33)        |
+| User     | default uid  |Default group (& gid) | Volumes                |
+|==========|==============|======================|========================|
+| mysql    | 1000         | mysql (1000)         | /var/lib/mysql         |
+|----------|--------------|----------------------|------------------------|
+| seafile  | 1000         | seafile (1000)       | /opt/seafile           |
+|          |	          |                      | /var/lib/seafile-data  |
+|          |              |                      | /backup                |
 
+In all likelyhood you wouldn't need to do that, but you can change the default uids/gids by adding environment variables to the docker-compose.yml file. For example:
+
+    environment:
+       SEAFILE_UID: 2000
+       SEAFILE_GID: 2000
+       DB_UID: 2001
+       DB_GID: 2001
+
+If you don't specify DB_UID/DB_GID, the SEAFILE_UID/SEAFILE_GID value is used for the db mysql user. Although its a bit stupid, you have to add those environment variables for all containers (data, db, seafile) for now. Might fix that later on.
 
 # Volumes
 
@@ -21,11 +32,11 @@ The (default) folder for MySQL/MariaDB, containing all the databases.
 
 ## /var/lib/seafile-data
 
-The data users store on seafile. Stored in a git
+The data users store on seafile. Stored in a git-like format.
 
 ## /opt/seafile
 
-The seafile configuration, as well as all versions of seafile that were installed over the lifetime of this installation. Bit unusual, but that is due to the non-standard way Seafile has to be setup/configured.
+The seafile configuration, as well as all versions of seafile that were installed over the lifetime of this installation. Bit unusual, but that is due to the non-standard way Seafile has to be setup/configured. 
 
 ## /backup
 
@@ -35,14 +46,28 @@ The folder where the (automated, optional) backups are stored. Would make sense 
 
 ## Garbage collection
 
-Garbage collection is disabled by default, but can be configured by setting the *ENABLE_GARBAGE_COLLECTION* environment variable to 'True'.
+[Seafile garbage collection](http://manual.seafile.com/maintain/seafile_gc.html) has to be executed while seafile is offline (unless you use the pay-version). The wrapper script used here stops all services, executes the garbage collection, then restarts the services again.
+
+You can kick off the garbage collection manually by executing:
+
+    ./seafile-gc.sh
+
+in the project root directory.
+
+The garbage collection cron job is disabled by default, but can be configured by setting the *ENABLE_GARBAGE_COLLECTION* environment variable to 'True'.
 The (default) schedule is to run the garbage collection every day, at 2.55am. When the garbage collection is executed, the seafile service will be unavailable until it is finished, so you have to decide if you can live with that or not. Executing it can save some disk-space, and usually it does not take long, but that depends on how much data was changed/deleted since the last time it was run.
 
 To change the schedule of the garbage collection, you need to edit the file *seafile/garbage_collection_schedule.sh* **before** creating the containers.
 
 ## Backup
 
-By default, backup is disabled. It can be enabled by setting the *ENABLE_BACKUP* environment variable to true. The (default) schedule to execute the backup is 3.15am, this can be change by editing the file *seafile/backup_schedule.sh* **before** creating the containers.
+You can kick off backup manually by executing:
+
+    ./seafile-backup.sh
+
+in the project root directory.
+
+By default, the backup cron job is disabled. It can be enabled by setting the *ENABLE_BACKUP* environment variable to true. The (default) schedule to execute the backup is 3.15am, this can be change by editing the file *seafile/backup_schedule.sh* **before** creating the containers.
 
 The way the backup is done can be modified as well, in order to do that edit the file *seafile/backup.sh*, again **before** the containers are created. By default, three different steps are executed during backup:
 

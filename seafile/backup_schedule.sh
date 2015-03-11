@@ -1,1 +1,1 @@
-15 03 * * * /opt/scripts/seafile-backup
+15 03 * * * seafile /opt/scripts/seafile-backup

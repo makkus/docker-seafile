@@ -15,7 +15,7 @@ The setup consists of a data-only container, which encapsulates all volumes for 
 ## Documentation
 
  - [Configure/Install](https://github.com/makkus/docker-seafile/blob/master/Install.md)
- - [Overview](https://github.com/makkus/docker-seafile/blob/master/Overview.md)
+ - [Manual](https://github.com/makkus/docker-seafile/blob/master/Manual.md)
 
 ## Quickstart
 
