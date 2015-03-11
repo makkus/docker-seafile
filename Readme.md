@@ -45,7 +45,6 @@ to the file */etc/hosts*. Use **localhost.home** as the hostname when asked, and
  - configurable backup scripts
  - remove old backups
  - revisit/simplify services/runit start files
- - wrapper scripts to manually kick off garbage collection/backup
  - configurable UIDs/GIDs for volumes
 
 ## Thanks
