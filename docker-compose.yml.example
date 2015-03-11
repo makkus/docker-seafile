@@ -10,7 +10,7 @@ data:
     - /backup
 
 db:
-  image: tutum/mariadb
+  build: db
   restart: always
   volumes_from:
     - data

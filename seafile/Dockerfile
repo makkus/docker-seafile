@@ -26,9 +26,9 @@ ADD setup-seafile.sh /usr/local/bin/setup-seafile
 ADD create_db.sql /opt/scripts/create_db.sql
 ADD garbage_collection.sh /opt/scripts/seafile-gc
 ADD backup.sh /opt/scripts/seafile-backup
-# create seafile user
-RUN groupadd -g 2000 seafile
-RUN useradd seafile -d /opt/seafile -s /bin/bash -u 2000 -g 2000
+# create seafile & backup user
+ADD prepare-volumes.sh /tmp/prepare-volumes.sh
+RUN /tmp/prepare-volumes.sh
 
 ADD backup_schedule.sh /etc/cron.d/backup_schedule.sh
 ADD garbage_collection_schedule.sh /etc/cron.d/garbage_collection_schedule.sh
