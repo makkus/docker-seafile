@@ -26,7 +26,13 @@ fi
 
 
 echo "(Re-)Building images"
+cp ids.lst data/ids.lst
+cp ids.lst db/ids.lst
+cp ids.lst seafile/ids.lst
 docker-compose build --no-cache
+rm data/ids.lst
+rm db/ids.lst
+rm seafile/ids.lst
 
 echo "Starting up containers..."
 docker-compose up -d
@@ -40,4 +46,11 @@ then
 else
 		echo "No seahub_settings_template.py, doing nothing."
 fi
+
+echo "Changing owners for volumes..."
+
+docker exec -i -t dockerseafile_data_1 /root/volume-permissions.sh
+
+echo "Starting setup process..."
+
 docker exec -i -t dockerseafile_seafile_1 /sbin/setuser seafile /usr/local/bin/setup-seafile

@@ -10,15 +10,7 @@ The services don't use root to run (except ), but non-privileged user accounts. 
 |          |	          |                      | /var/lib/seafile-data  |
 |          |              |                      | /backup                |
 
-In all likelyhood you wouldn't need to do that, but you can change the default uids/gids by adding environment variables to the docker-compose.yml file. For example:
-
-    environment:
-       SEAFILE_UID: 2000
-       SEAFILE_GID: 2000
-       DB_UID: 2001
-       DB_GID: 2001
-
-If you don't specify DB_UID/DB_GID, the SEAFILE_UID/SEAFILE_GID value is used for the db mysql user. Although its a bit stupid, you have to add those environment variables for all containers (data, db, seafile) for now. Might fix that later on.
+In all likelyhood you wouldn't need to do that, but you can change the default uids/gids by changing the values in the file *ids.lst* before running the *first-time-setup.sh* script.
 
 # Volumes
 
@@ -84,3 +76,21 @@ The folder **/opt/seafile** contains configuration data, as well as the seafile 
 Last, but most importantly, the seafile user data is backed up, using rsync, to **/backup/seafile/data**. Since Seafile uses a git-like format to store the libraries, data can't be read directly via filesystem tools from this folder.
 
 If that is necessary, one could change the backup script and make an rsync from the webdav endpoint, or possibly setup fuse and use that.
+
+## Connect to containers
+
+In case of problems, you can manually connect to (running) containers, using *docker exec*, which works similar to ssh. For convenience, there are 3 wrapper scripts for each of the running containers:
+
+    ./connect_db.sh
+    ./connect_seafile.sh
+    ./connect_nginx.sh
+
+## Upgrade seafile
+
+If you want to upgrade your seafile server, there is also a wrapper script:
+
+    ./seafile-upgrade.sh <target_version>
+
+This logs into the seafile container, stops the seafile service, downloads the updated package, extracts it and puts it into the right place (/opt/seafile). 
+
+Because I could not be bothered to do all the string version matching stuff that would have been required, and also because I think it's safer, there is some manual work. The wrapper script will print out some help text as to what needs to be done. 

@@ -1,6 +1,7 @@
 FROM ubuntu:trusty
 MAINTAINER FENG, HONGLIN <hfeng@tutum.co>
 
+ADD ids.lst /tmp/ids.lst
 ADD prepare-user.sh /tmp/prepare-user.sh
 RUN /tmp/prepare-user.sh
 

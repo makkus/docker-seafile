@@ -23,10 +23,12 @@ RUN ulimit -n 30000
 # script to download seafile
 RUN mkdir -p /opt/scripts/
 ADD setup-seafile.sh /usr/local/bin/setup-seafile
+ADD upgrade-seafile.sh /usr/local/bin/upgrade-seafile
 ADD create_db.sql /opt/scripts/create_db.sql
 ADD garbage_collection.sh /opt/scripts/seafile-gc
 ADD backup.sh /opt/scripts/seafile-backup
 # create seafile & backup user
+ADD ids.lst /tmp/ids.lst
 ADD prepare-user.sh /tmp/prepare-user.sh
 RUN /tmp/prepare-user.sh
 
