@@ -16,7 +16,12 @@ Check out this repository, then enter the ```docker-seafile``` folder:
 
 ## Initial config
 
-In the editor of your choice, open 'docker-compose.yml' to edit:
+The main config file is named 'docker-compose.yml'. You can create a template by copying the example file:
+
+    cp docker-compose.yml.example docker-compose.yml
+
+
+In the editor of your choice, you can control the setup by changing some of the following sections:
 
 ### Volumes
 
