@@ -2,13 +2,13 @@
 
 The services don't use root to run (except ), but non-privileged user accounts. Here is a list of users and groups, along with uids and gids (useful for preparing folders mapped to volumes):
 
-| User     | default uid  |Default group (& gid) | Volumes                |
-|==========|==============|======================|========================|
-| mysql    | 1000         | mysql (1000)         | /var/lib/mysql         |
-|----------|--------------|----------------------|------------------------|
-| seafile  | 1000         | seafile (1000)       | /opt/seafile           |
-|          |	          |                      | /var/lib/seafile-data  |
-|          |              |                      | /backup                |
+    | User     | default uid  |Default group (& gid) | Volumes                |
+    |==========|==============|======================|========================|
+    | mysql    | 1000         | mysql (1000)         | /var/lib/mysql         |
+    |----------|--------------|----------------------|------------------------|
+    | seafile  | 1000         | seafile (1000)       | /opt/seafile           |
+    |          |	          |                      | /var/lib/seafile-data  |
+    |          |              |                      | /backup                |
 
 In all likelyhood you wouldn't need to do that, but you can change the default uids/gids by changing the values in the file *ids.lst* before running the *first-time-setup.sh* script.
 
