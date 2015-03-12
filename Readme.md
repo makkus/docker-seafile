@@ -38,7 +38,6 @@ to the file */etc/hosts*. Use **localhost.home** as the hostname when asked, and
 
 ## TODO
 
- - write wrapper script to update seafile 
  - scripts to restore from backup
  - more configuration options upfront
  - configurable cron jobs
