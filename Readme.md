@@ -19,7 +19,7 @@ The setup consists of a data-only container, which encapsulates all volumes for 
 
 ## Quickstart
 
-For this quickstart to work, you need to add the line:
+For this quickstart to work, you need to have [Docker, v 1.4+](https://docs.docker.com/installation/) and [Docker compose, v 1.1+](http://docs.docker.com/compose/install/) installed. Also, you need to add the line:
 
     127.0.0.1     localhost.home
    
