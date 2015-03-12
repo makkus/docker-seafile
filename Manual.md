@@ -24,7 +24,7 @@ The (default) folder for MySQL/MariaDB, containing all the databases.
 
 ## /var/lib/seafile-data
 
-The data users store on seafile. Stored in a git-like format.
+The data users store on seafile. Stored in the native seafile, git-like format.
 
 ## /opt/seafile
 
