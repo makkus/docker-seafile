@@ -3,6 +3,22 @@
  - [Docker](https://docs.docker.com/installation/), v 1.4+
  - [Docker compose](http://docs.docker.com/compose/install/), v1.1+
 
+## Installing docker on Ubuntu
+
+We want to use the docker packages from dockers repository, the ones that come with Ubuntu are usually a bit outdated:
+
+    sudo apt-get purge docker.io
+    curl -s https://get.docker.io/ubuntu/ | sudo sh
+    sudo apt-get update
+    sudo apt-get install lxc-docker
+    
+## Installing docker-compose on Ubuntu
+
+As per instructions from the [docker-compose manual](http://docs.docker.com/compose/install/):
+
+    curl -L https://github.com/docker/compose/releases/download/1.1.0/docker-compose-`uname -s`-`uname -m` > /usr/local/bin/docker-compose
+    chmod +x /usr/local/bin/docker-compose
+
 # Setup
 
 Because of the, well, lets just say 'unusual' setup procedure of seafile, it's hard to provide a docker container that does not require manual intervention. That's why there is a script that needs to run at first start, which will ask for some details, in addition to the config files.
