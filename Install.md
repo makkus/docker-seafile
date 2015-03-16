@@ -61,13 +61,9 @@ Or, you could map some or all of the volumes to directories on your host system,
      - /home/markus/docker/seafile/seafile:/opt/seafile
      - /home/markus/docker/seafile/backup:/backup
      
-In that case you need to make sure for those directories to have the right permissions. If you don't care too much, you can just do:
+In that case you need to make sure for those directories to have the right permissions. The default uid/gid for access to those directories is 1000 (the default for the first user on an Ubuntu system). You can change this in the ids.lst file if you need to, then adapt the permissions on those directories, e.g.:
 
-    chmod -R 777 <db_dir> <data_dir> <seafile_dir> <backup_dir>
-    
-or, if you want to have permissions a bit tighter, do:
-
-    sudo chown -R 102:105 <db_dir>
+    sudo chown -R 1001:1001 <db_dir>
     sudo chown -R 2000:2000 <data_dir> <seafile_dir> <backup_dir>
     
 
