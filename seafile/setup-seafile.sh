@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 if [ -e /opt/seafile/seafile-setup-finished ]
 then 
@@ -60,7 +60,9 @@ then
 		if [ -x ${SEAFILE_PATH}/setup-seafile-mysql.sh ]
 		then
 				echo "Starting seafile installation..."
-				${SEAFILE_PATH}/setup-seafile-mysql.sh
+				SEAFILE_CLEAN_TITLE=${SEAFILE_SITE_TITLE// /_}
+				/usr/local/bin/setup-seafile.expect "$SEAFILE_VERSION" "$SEAFILE_CLEAN_TITLE" "$SEAFILE_HOSTNAME" "$SEAFILE_DB_USER" "$SEAFILE_DB_PASSWORD"
+				#${SEAFILE_PATH}/setup-seafile-mysql.sh
 				
 				# check whether setup was successful
 				if [ -e /opt/seafile/ccnet/seafile.ini ]
@@ -77,6 +79,10 @@ then
 						mv $DIR/* /var/lib/seafile-data/
 						echo /var/lib/seafile-data > /opt/seafile/ccnet/seafile.ini
 						rmdir /opt/seafile/seafile-data
+
+						# copying custom seafile install data
+						mkdir -p "$SEAFILE_PATH/seahub/media/custom"
+						cp -r /tmp/seafile-custom/* "$SEAFILE_PATH/seahub/media/custom"
 
 						# changing url: http://manual.seafile.com/deploy/deploy_seahub_at_non-root_domain.html
 						echo "FILE_SERVER_ROOT = \"https://${SEAFILE_HOSTNAME}/seafhttp\"" >> /opt/seafile/seahub_settings.py

@@ -15,7 +15,8 @@ RUN apt-get update && apt-get install -y \
 		mysql-client \
 		socat \
 		zile \ 
-		bup \ 
+		bup \
+		expect \
 		python-flup
 
 RUN ulimit -n 30000
@@ -23,10 +24,14 @@ RUN ulimit -n 30000
 # script to download seafile
 RUN mkdir -p /opt/scripts/
 ADD setup-seafile.sh /usr/local/bin/setup-seafile
+ADD setup-seafile.expect /usr/local/bin/setup-seafile.expect
+RUN chmod 755 /usr/local/bin/setup-seafile
+RUN chmod 755 /usr/local/bin/setup-seafile.expect
 ADD upgrade-seafile.sh /usr/local/bin/upgrade-seafile
 ADD create_db.sql /opt/scripts/create_db.sql
 ADD garbage_collection.sh /opt/scripts/seafile-gc
 ADD backup.sh /opt/scripts/seafile-backup
+ADD custom /tmp/seafile-custom
 # create seafile & backup user
 ADD ids.lst /tmp/ids.lst
 ADD prepare-user.sh /tmp/prepare-user.sh
@@ -52,4 +57,4 @@ ADD seahub_stop.sh /etc/seafile/service/seahub/finish
 RUN chown -R seafile /etc/seafile
 
 # Clean up for smaller image
-RUN apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+RUN apt-get clean && rm -rf /var/lib/apt/lists/* /var/tmp/*

@@ -23,8 +23,12 @@ ADD sites-enabled /etc/nginx/sites-enabled
 # Define working directory.
 WORKDIR /etc/nginx
 
+ADD run.sh /opt/run.sh
+RUN chmod 755 /opt/run.sh
+
 # Define default command.
-CMD ["nginx"]
+#CMD ["nginx"]
+CMD ["/opt/run.sh"]
 
 # Expose ports.
 EXPOSE 80
@@ -33,6 +37,3 @@ EXPOSE 443
 # Clean up APT when done.dd
 RUN apt-get clean && rm -rf /var/lib/apt/lists/* 
 
-# fix hostname in /etc/nginx/sites-enabled/default
-RUN sed -i -e "s/^\s*server_name.*/    server_name = ${SEAFILE_ENV_SEAFILE_HOSTNAME};/" /etc/nginx/sites-enabled/default
-RUN if [ ! -z ${SEAFILE_ENV_SEAFILE_SITE_ROOT} ]; then sed -i -e "s/^\s*location \/seafile/    location \/${SEAFILE_ENV_SEAFILE_SITE_ROOT}/" /etc/nginx/sites-enabled/default; else sed -i -e "s/^\s*location \/seafile/    location \//" /etc/nginx/sites-enabled/default; fi
