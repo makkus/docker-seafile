@@ -46,3 +46,14 @@ nginx:
   ports:
     - "80:80"
     - "443:443"
+
+# apache:
+#   build: apache
+#   restart: always
+#   links:
+#     - seafile
+#   volumes_from:
+#     - data
+#   ports:
+#     - "80:80"
+#     - "443:443"
