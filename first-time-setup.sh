@@ -13,15 +13,15 @@ echo "Removing all potentially existing containers and volumes..."
 docker-compose rm -v
 
 echo "Checking certificate in 'nginx/certs'..."
-if [ -e nginx/certs/cacert.pem ]
+if [ -e apache/certs/cacert.pem ]
 then 
 		echo "Certificate exists (nginx/certs/cacert.pem), not creating new one..."
 else
 		echo "No certificate nginx/certs/cacert.pem, creating a self-signed one..."
-		mkdir -p nginx/certs
-		openssl genrsa -out nginx/certs/privkey.pem 2048
-		openssl req -new -x509 -key nginx/certs/privkey.pem -out nginx/certs/cacert.pem -days 1095
-		echo "Certificate created and put into 'nginx/certs'"
+		mkdir -p apache/certs
+		openssl genrsa -out apache/certs/privkey.pem 2048
+		openssl req -new -x509 -key apache/certs/privkey.pem -out apache/certs/cacert.pem -days 1095
+		echo "Certificate created and put into 'apache/certs'"
 fi
 
 

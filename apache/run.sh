@@ -14,6 +14,8 @@ sed -i -e "s/^\s*ServerName.*/         ServerName ${SEAFILE_ENV_SEAFILE_HOSTNAME
 
 if [ ! -z ${SEAFILE_ENV_SEAFILE_SITE_ROOT} ]; then sed -i -e "s/^RewriteRule \^(\.\*)/RewriteRule ^\/(${SEAFILE_ENV_SEAFILE_SITE_ROOT}.*)/" /etc/apaches/sites-enabled/default-ssl.conf; fi
 
+/etc/init.d/shibd start
+
 source /etc/apache2/envvars
 tail -F /var/log/apache2/* &
 exec apache2 -D FOREGROUND
