@@ -94,6 +94,9 @@ then
 						fi
 						echo "SERVE_STATIC = False" >> /opt/seafile/seahub_settings.py
 						echo "MEDIA_URL = '/seafmedia/'" >> /opt/seafile/seahub_settings.py
+						echo "COMPRESS_URL = MEDIA_URL" >> /opt/seafile/seahub_settings.py
+						echo "STATIC_URL = MEDIA_URL+'assets/'" >> /opt/seafile/seahub_settings.py
+						
 						if [ ! -z ${SEAFILE_SITE_ROOT} ] 
 						then 
 								echo "SITE_ROOT = '/${SEAFILE_SITE_ROOT}/'" >> /opt/seafile/seahub_settings.py

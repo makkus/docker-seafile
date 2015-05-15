@@ -3,7 +3,7 @@
 if [ ! -e docker-compose.yml ]
 then
 	echo "No docker-compose.yml file, copying and using example..."
-	cp docker-compose.yml.example docker-compose.yml
+	cp docker-compose.yml.example.nginx docker-compose.yml
 fi
 
 
@@ -12,16 +12,33 @@ docker-compose stop
 echo "Removing all potentially existing containers and volumes..."
 docker-compose rm -v
 
-echo "Checking certificate in 'nginx/certs'..."
-if [ -e apache/certs/cacert.pem ]
-then 
-		echo "Certificate exists (nginx/certs/cacert.pem), not creating new one..."
+WEBSERVER="nginx"
+
+grep "^\s*build: apache_shib" docker-compose.yml
+
+if [ $? -eq 0 ]; then
+		echo "Using apache with shibboleth configuration."
+		WEBSERVER="apache"
 else
-		echo "No certificate nginx/certs/cacert.pem, creating a self-signed one..."
-		mkdir -p apache/certs
-		openssl genrsa -out apache/certs/privkey.pem 2048
-		openssl req -new -x509 -key apache/certs/privkey.pem -out apache/certs/cacert.pem -days 1095
-		echo "Certificate created and put into 'apache/certs'"
+		grep "^\s*build: apache" docker-compose.yml
+		if [ $? -eq 0 ]; then
+  		echo "Using apache configuration."
+	  	WEBSERVER="apache"
+		else
+		  echo "Using nginx configuration."
+		fi
+fi
+
+echo "Checking certificate in $WEBSERVER/certs..."
+if [ -e "$WEBSERVER/certs/cacert.pem" ]
+then 
+		echo "Certificate exists ($WEBSERVER/certs/cacert.pem), not creating new one..."
+else
+		echo "No certificate $WEBSERVER/certs/cacert.pem, creating a self-signed one..."
+		mkdir -p "$WEBSERVER/certs"
+		openssl genrsa -out "$WEBSERVER/certs/privkey.pem" 2048
+		openssl req -new -x509 -key "$WEBSERVER/certs/privkey.pem" -out "$WEBSERVER/certs/cacert.pem" -days 1095
+		echo "Certificate created and put into $WEBSERVER/certs"
 fi
 
 

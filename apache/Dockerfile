@@ -15,7 +15,7 @@ RUN \
   echo "deb http://archive.ubuntu.com/ubuntu trusty main universe multiverse restricted" > /etc/apt/sources.list && \
   echo "deb http://archive.ubuntu.com/ubuntu trusty-security main universe multiverse restricted" >> /etc/apt/sources.list && \
   apt-get update && \
-  apt-get install -y wget apache2 libapache2-mod-fastcgi zile python-flup shibboleth-sp2-schemas libshibsp-dev libshibsp-doc libapache2-mod-shib2 opensaml2-tools
+  apt-get install -y wget apache2 libapache2-mod-fastcgi zile python-flup
 	
 
 ADD default-ssl.conf /etc/apache2/sites-available/default-ssl.conf
@@ -29,7 +29,6 @@ RUN \
 	a2enmod proxy && \
 	a2enmod proxy_http && \
 	a2enmod ssl && \
-	a2enmod shib2 && \
 	a2ensite default-ssl
 	
 

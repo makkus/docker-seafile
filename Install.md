@@ -32,9 +32,15 @@ Check out this repository, then enter the ```docker-seafile``` folder:
 
 ## Initial config
 
-The main config file is named 'docker-compose.yml'. You can create a template by copying the example file:
+### Choose a webserver:
 
-    cp docker-compose.yml.example docker-compose.yml
+I prepared templates for the user of both *nginx* and *apache*. For the latter there is also the possibility to use Shibboleth for authentication. Check out the provided *docker-compose.yml.example.<xxx>* files for details, and copy the one that suits you as **docker-compose.yml**
+
+### Create initial *docker-compose.yml*
+
+The main config file is named 'docker-compose.yml'. You can create a template by copying one of the example files:
+
+    cp docker-compose.yml.example.nginx docker-compose.yml
 
 
 In the editor of your choice, you can control the setup by changing some of the following sections:
@@ -82,7 +88,7 @@ In that case you need to make sure for those directories to have the right permi
  - **SEAFILE_DB_PASSWORD**: the password of the mariadb user to manage the seafile databases
  - **SEAFILE_HOSTNAME**: the hostname under which this seafile installation will be accessible, because of some internal seafile requirement, this either needs to be an ip address or a hostname with at last a domain name (basically, the string you provide needs to have a '.' in it, if you only want to test, just use something like: *boxname.home* , be aware you'll need this later in the manual seafile setup process, also, you'll need to add an entry into your /etc/hosts file if you do that, otherwise file up-/downloads won't work)
  - **SEAFILE_SITE_ROOT**: the path in the url under which seafile should be accessible (e.g. https://host.name.com/path). Use an empty string if you want Seafile to be accessible via the domain name.
- - **SEAFILE_SITE_TITLE**: the title of this seafile installation that will be displayed on the webpage
+ - **SEAFILE_SITE_TITLE**: the title of this seafile installation that will be displayed on the webpage, don't use fancy characters in there if possible, I'm not sure what the rules are, but sometimes the seafile install script rejects titles.
  - **ENABLE_BACKUP**: True or False, whether to automatically backup the seafile app data, the config, the database and the files stored in seafile
  - **ENABLE_GARBAGE_COLLECTION**: True or False, whether to run the garbage collection regularly (3am in the morning, every day). When garbage collection is running, seafile is shut down and therefore unavailable until it is finished.
 
@@ -90,9 +96,22 @@ In that case you need to make sure for those directories to have the right permi
 
 If you want to configure additional settings in *seahub_settings.py* (as per: http://manual.seafile.com/config/seahub_settings_py.html ), you can create/edit a file named *seahub_settings_template.py* in the project root folder. If it exists, the *first-time-setup.sh* script will copy its content to *seahub_settings.py* during the setup process. Check out the *seahub_settings_template.py.example* file provided.
 
+### Shibboleth configuration
+
+If using shibboleth, there are some required settings for *seahub_settings.py* to be configured. Check out *seahub_settings_template.py.example.apache_shibboleth* for details. You also need to create certificates and add a few files as volumes:
+
+   volumes:
+     - /data/seafile/shib/sp-cert.pem:/etc/shibboleth/sp-cert.pem
+     - /data/seafile/shib/sp-key.pem:/etc/shibboleth/sp-key.pem
+     - /data/seafile/shib/shibboleth2.xml:/etc/shibboleth/shibboleth2.xml
+     - /data/seafile/shib/tuakiri-test-metadata-cert.pem:/etc/shibboleth/tuakiri-test-metadata-cert.pem
+     - /data/seafile/shib/attribute-map.xml:/etc/shibboleth/attribute-map.xml
+
+Check out *docker-compose.yml.example.apache_shibboleth* for a working example.
+
 ### Host certificate (optional)
 
-If you have a host certificate for the server you intend to run, place it and the associated key in the *nginx/certs* folder and rename the files to:
+If you have a host certificate for the server you intend to run, place it and the associated key in the *<selected_webserver_config>/certs* folder and rename the files to:
 
     cacert.pem
 	privkey.pem
@@ -105,35 +124,35 @@ Anyway, run:
 
     sudo ./first-time-setup.sh
 
-If no certificate is in the *nginx/certs* folder, a self-signed one will be created. Answer the questions asked, the only vaguely important one is the "Common name", where you will have to enter your host name for the service. 
+If no certificate is in the *<selected_webserver_config>/certs* folder, a self-signed one will be created. Answer the questions asked, the only vaguely important one is the "Common name", where you will have to enter your host name for the service. 
 
 Now it will take a while for all the requirements and container-related stuff to be downloaded and built. Once that is done, the containers will be started, the database tables will be created, and the seafile setup process will be kicked off. Check out the Seafile documentation for more details [here](http://manual.seafile.com/deploy/using_mysql.html).
 
-As I said before, the seafile installation process is unusual, and not really well suited for automated setup. That's why there are some questions you'll have to answer now manually:
+As I said before, the seafile installation process is unusual, and not really well suited for automated setup. I wrote an *expect* script to answer the following questions in the following way:
 
 ### [ server name ]
 
-The name of the server that is displayed on the client. Choose anything you want, as long as it's only letters and digits.
+The name of the server that is displayed on the client. **SEAFILE_SITE_TITLE** from docker-compose.yml
 
 ### [ This server's ip or domain ]
 
-This needs to be the same as the *SEAFILE_HOSTNAME* you set in the docker-compose.yml file above, as well as the common name in your host certificate. For some reason Seafile requires the hostname to include a domain name, or you can use an ip address.
+This will be set to the **SEAFILE_HOSTNAME** environment variable in the docker-compose.yml file above, as well as the common name in your host certificate. For some reason Seafile requires the hostname to include a domain name, or you can use an ip address.
 
 ### ccnet server port
 
-Use the default, 10001.
+Using the default, 10001.
 
 ### seafile data
 
-Again, leave the default. But even if you choose something different, a script will be run later to move that folder to be under /var/lib/seafile-data in the container, in order to make container data management better configurable. If it was left under **/opt/seafile**, it would not be easily possible to have map the application and data side of seafile to different (possibly remote) folders.
+Again, leaving the default. But that is irrelevant, since a script will be run later to move that folder to be under /var/lib/seafile-data in the container, in order to make container data management better configurable. If it was left under **/opt/seafile**, it would not be easily possible to have map the application and data side of seafile to different (possibly remote) folders.
 
 ### seafile server port
 
-Use the default, 12001
+Using the default, 12001
 
 ### seafile fileserver
 
-Use the default, 8082
+Using the default, 8082
 
 ### Database configuration
 
@@ -141,41 +160,41 @@ A script already prepared the seafile database user & databases at this stage, s
 
 #### Choose the way to initialize the seafile databases
 
-Choose **[2]**, 'Use existing ccnet/seafile/seahub' databases
+Choosing **[2]**, 'Use existing ccnet/seafile/seahub' databases
 
 #### Host of the mysql server
 
-Enter "db" (without quotes). That is the hostname within the docker network for the Mariadb container.
+Using "db" (without quotes). That is the hostname within the docker network for the Mariadb container.
 
 #### Port of the mysql server
 
-Use the default, 3306.
+Using the default, 3306.
 
 #### mysql user for seafile
 
-Use whatever you used in the docker-compose.yml file under **SEAFILE_DB_USER**.
+Using whatever you used in the docker-compose.yml file under **SEAFILE_DB_USER**.
 
 #### password for mysql user
 
-Use whatever you used in the docker-compose.yml file under **SEAFILE_DB_PASSWORD**
+Using whatever you used in the docker-compose.yml file under **SEAFILE_DB_PASSWORD**
 
 #### existing database name for ccnet
 
-Enter 'ccnet' (without quotes).
+Using 'ccnet' (without quotes).
 
 #### existing database name for seafile
 
-Enter 'seafile' (without quotes)
+Using 'seafile' (without quotes)
 
 #### existing database name for seahub
 
-Enter 'seahub' (without quotes)
+Using 'seahub' (without quotes)
 
 ### Finishing first part of setup
 
-Now you should be presented with an overview of your configuration. Press 'Enter', and wait a bit.
+Now the 'official' part of the 'manual' setup is finished. The seafile install script does it's thing now for a few seconds. 
 
-### Seahub config
+## Seahub admin config
 
 Now the service will be restarted, and we need to enter the admin credentials.
 
