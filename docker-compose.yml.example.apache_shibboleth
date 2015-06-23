@@ -1,0 +1,51 @@
+data:
+  build: data
+  restart: never
+  volumes:
+    - /etc/timezone:/etc/timezone:ro
+    - /etc/localtime:/etc/localtime:ro
+    - /data/seafile/db:/var/lib/mysql
+    - /data/seafile/data:/var/lib/seafile-data
+    - /data/seafile/app:/opt/seafile
+    - /data/seafile/backup:/backup
+
+db:
+  build: db
+  restart: always
+  volumes_from:
+    - data
+  environment:
+    MARIADB_PASS: very_secret
+
+seafile:
+  build: seafile
+  restart: always
+  links:
+    - db
+  volumes_from:
+    - data
+  environment:
+    ENABLE_BACKUP: False
+    ENABLE_GARBAGE_COLLECTION: False
+    SEAFILE_VERSION: 4.2.0
+    SEAFILE_DB_USER: seafile
+    SEAFILE_DB_PASSWORD: password
+    SEAFILE_HOSTNAME: "localhost.home"
+    SEAFILE_SITE_TITLE: "MySeafile"
+
+apache:
+   build: apache_shib
+   restart: always
+   links:
+     - seafile
+   volumes:
+     - /data/seafile/shib/sp-cert.pem:/etc/shibboleth/sp-cert.pem
+     - /data/seafile/shib/sp-key.pem:/etc/shibboleth/sp-key.pem
+     - /data/seafile/shib/shibboleth2.xml:/etc/shibboleth/shibboleth2.xml
+     - /data/seafile/shib/tuakiri-test-metadata-cert.pem:/etc/shibboleth/tuakiri-test-metadata-cert.pem
+     - /data/seafile/shib/attribute-map.xml:/etc/shibboleth/attribute-map.xml
+   volumes_from:
+     - data
+   ports:
+     - "80:80"
+     - "443:443"

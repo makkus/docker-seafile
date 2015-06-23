@@ -1,0 +1,27 @@
+EXTRA_AUTHENTICATION_BACKENDS = (          
+    'shibboleth.backends.ShibbolethRemoteUserBackend', 
+)                
+EXTRA_MIDDLEWARE_CLASSES = (
+    'shibboleth.middleware.ShibbolethRemoteUserMiddleware',  
+)                
+SHIBBOLETH_ATTRIBUTE_MAP = {
+    "eppn": (True, "username"),      
+}                
+
+ENABLE_SHIB_LOGIN = True                                       
+
+ENABLE_THUMBNAIL = True
+THUMBNAIL_DEFAULT_SIZE = '32'
+PREVIEW_DEFAULT_SIZE = '240'
+
+EMAIL_USE_TLS = False
+EMAIL_HOST = 'mailhost.auckland.ac.nz'
+EMAIL_HOST_USER = 'm.binsteiner@auckland.ac.nz'
+EMAIL_HOST_PASSWORD = ''
+EMAIL_PORT = 25
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+SERVER_EMAIL = EMAIL_HOST_USER
+
+ENABLE_SIGNUP = True
+ACTIVATE_AFTER_REGISTRATION = False
+
