@@ -45,7 +45,7 @@ then
 		docker exec -i dockerseafile_seafile_1 /bin/bash -c 'cat > /opt/seafile/seahub_settings_template.py' < seahub_settings_template.py
 else
 		echo "No seahub_settings_template.py, doing nothing."
-fi
+# FIXME: 
 
 echo "Changing owners for volumes..."
 
