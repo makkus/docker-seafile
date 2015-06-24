@@ -44,7 +44,7 @@ then
 		mkdir -p /opt/seafile/temp
 		cd /opt/seafile/temp && rm -f $SEAFILE_TAR_FILE
 
-		curl -L -O "https://bitbucket.org/haiwen/seafile/downloads/${SEAFILE_TAR_FILE}"
+		curl -L -O "https://bintray.com/artifact/download/seafile-org/seafile/${SEAFILE_TAR_FILE}"
 		tar xzf seafile-server_*
 		mv seafile-server-* /opt/seafile
 		chown -R seafile /opt/seafile/seafile-server-*
