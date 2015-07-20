@@ -17,7 +17,6 @@ RUN \
 
 ADD nginx.conf /etc/nginx/nginx.conf
 ADD certs /etc/nginx/certs
-ADD conf.d /etc/nginx/conf.d
 ADD sites-enabled /etc/nginx/sites-enabled
 
 # Define working directory.
