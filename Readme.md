@@ -37,13 +37,14 @@ to the file */etc/hosts*. Use **localhost.home** as the hostname when asked, and
     (accept insecure host cert when browser warns)
 
 ## TODO
-
+ - fix backup & upgrade scripts
  - scripts to restore from backup
  - more configuration options upfront
  - configurable cron jobs
  - configurable backup scripts
  - remove old backups
  - revisit/simplify services/runit start files
+ - add memcached
 
 ## Thanks
 
