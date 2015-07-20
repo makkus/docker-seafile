@@ -100,12 +100,12 @@ If you want to configure additional settings in *seahub_settings.py* (as per: ht
 
 If using shibboleth, there are some required settings for *seahub_settings.py* to be configured. Check out *seahub_settings_template.py.example.apache_shibboleth* for details. You also need to create certificates and add a few files as volumes:
 
-   volumes:
-     - /data/seafile/shib/sp-cert.pem:/etc/shibboleth/sp-cert.pem
-     - /data/seafile/shib/sp-key.pem:/etc/shibboleth/sp-key.pem
-     - /data/seafile/shib/shibboleth2.xml:/etc/shibboleth/shibboleth2.xml
-     - /data/seafile/shib/tuakiri-test-metadata-cert.pem:/etc/shibboleth/tuakiri-test-metadata-cert.pem
-     - /data/seafile/shib/attribute-map.xml:/etc/shibboleth/attribute-map.xml
+    volumes:
+      - /data/seafile/shib/sp-cert.pem:/etc/shibboleth/sp-cert.pem
+      - /data/seafile/shib/sp-key.pem:/etc/shibboleth/sp-key.pem
+      - /data/seafile/shib/shibboleth2.xml:/etc/shibboleth/shibboleth2.xml
+      - /data/seafile/shib/tuakiri-test-metadata-cert.pem:/etc/shibboleth/tuakiri-test-metadata-cert.pem
+      - /data/seafile/shib/attribute-map.xml:/etc/shibboleth/attribute-map.xml
 
 Check out *docker-compose.yml.example.apache_shibboleth* for a working example.
 
