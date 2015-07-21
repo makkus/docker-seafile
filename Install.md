@@ -36,6 +36,10 @@ Check out this repository, then enter the ```docker-seafile``` folder:
 
 I prepared templates for the user of both *nginx* and *apache*. For the latter there is also the possibility to use Shibboleth for authentication. Check out the provided *docker-compose.yml.example.<xxx>* files for details, and copy the one that suits you as **docker-compose.yml**
 
+### Using seafile professional
+
+There is an option to use the professional version of seafile instead of the community one. This is not really streamlined yet. Basically, you need to download the seafile professional tarball, put it into the seafile-pro directory, change the build directory to seafile-pro in docker-compose.yml, and change the seafile version in there to the one you downloaded. Check out *docker-compose.yml.example.pro.nginx* for a working example.
+
 ### Create initial *docker-compose.yml*
 
 The main config file is named 'docker-compose.yml'. You can create a template by copying one of the example files:
