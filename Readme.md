@@ -11,6 +11,7 @@ The setup consists of a data-only container, which encapsulates all volumes for 
    - preconfigured webdav
  - configurable cron-job for garbage collection
  - configurable cron-job for backup
+ - option to use either the community version, or the professional one (although the latter only has basic support at the moment)
 
 ## Documentation
 
@@ -45,6 +46,7 @@ to the file */etc/hosts*. Use **localhost.home** as the hostname when asked, and
  - remove old backups
  - revisit/simplify services/runit start files
  - add memcached
+ - better support for pro version
 
 ## Thanks
 
