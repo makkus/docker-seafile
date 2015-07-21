@@ -1,0 +1,48 @@
+data:
+  build: data
+  restart: never
+  volumes:
+    - /etc/timezone:/etc/timezone:ro
+    - /etc/localtime:/etc/localtime:ro
+    - /var/lib/mysql
+    - /var/lib/seafile-data
+    - /opt/seafile
+    - /backup
+
+db:
+  build: db
+  restart: always
+  volumes_from:
+    - data
+  environment:
+    MARIADB_PASS: very_secret
+
+seafile:
+  build: seafile-pro
+  restart: always
+  links:
+    - db
+  volumes_from:
+    - data
+  environment:
+    ENABLE_BACKUP: False
+    ENABLE_GARBAGE_COLLECTION: False
+    SEAFILE_VERSION: 4.2.4
+    SEAFILE_DB_USER: seafile
+    SEAFILE_DB_PASSWORD: password
+    SEAFILE_HOSTNAME: "localhost.home"
+    SEAFILE_SITE_ROOT: "seafile"
+    SEAFILE_SITE_TITLE: "My Seafile"
+
+
+
+nginx:
+  build: nginx
+  restart: always
+  links:
+    - seafile
+  volumes_from:
+    - data
+  ports:
+    - "80:80"
+    - "443:443"
