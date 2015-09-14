@@ -23,9 +23,17 @@ expect "\[ This server's ip or domain \]"
 
 send "$host\r"
 
+expect "\[ default \"10001\" \]"
+
+send "10001\r"
+
 expect "\[ default \"/opt/seafile/seafile-data\" \]"
 
 send "/opt/seafile/seafile-data\r"
+
+expect "\[ default \"12001\" \]"
+
+send "12001\r"
 
 expect "\[ default \"8082\" \]"
 
