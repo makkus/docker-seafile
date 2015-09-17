@@ -1,5 +1,7 @@
 This project is about creating a set of Docker containers to run a [Seafile](http://seafile.com/en/home/) service.
 
+Note: only seems to be working on a Linux host at the moment. If you are a Mac user and get it to work, please do tell me.
+
 The setup consists of a data-only container, which encapsulates all volumes for all containers in order to make the configuration of the related data storage easier. 
 
 ## Features
