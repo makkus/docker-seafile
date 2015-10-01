@@ -2,6 +2,8 @@ This project is about creating a set of Docker containers to run a [Seafile](htt
 
 Note: only seems to be working on a Linux host at the moment. If you are a Mac user and get it to work, please do tell me.
 
+Unfortunately, this breaks every now and then with a new Seafile release, because of the really unfortunate and fragile way Seafile needs to be installed. I will fix it whenever I realize that is the case, but it might 
+
 The setup consists of a data-only container, which encapsulates all volumes for all containers in order to make the configuration of the related data storage easier. 
 
 ## Features
