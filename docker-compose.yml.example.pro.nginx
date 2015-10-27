@@ -27,7 +27,7 @@ seafile:
   environment:
     ENABLE_BACKUP: False
     ENABLE_GARBAGE_COLLECTION: False
-    SEAFILE_VERSION: 4.2.4
+    SEAFILE_VERSION: 4.4.4
     SEAFILE_DB_USER: seafile
     SEAFILE_DB_PASSWORD: password
     SEAFILE_HOSTNAME: "localhost.home"
