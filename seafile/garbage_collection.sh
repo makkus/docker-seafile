@@ -29,7 +29,7 @@ sv down seafile_services
 # just to make sure...
 sleep 4
 
-/sbin/setuser seafile /opt/seafile/seafile-server-latest/seaf-gc.sh run
+/sbin/setuser seafile /opt/seafile/seafile-server-latest/seaf-gc.sh
 
 sv start seafile_services
 

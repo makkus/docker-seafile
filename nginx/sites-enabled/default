@@ -72,10 +72,4 @@ server {
         root /opt/seafile/seafile-server-latest/seahub;
     }
 
-    location /plex_watch {
-	proxy_pass http://172.17.42.1:9000/html/plexWatch;
-	auth_basic	"plex_watch";
-	auth_basic_user_file	/etc/nginx/conf.d/.htpasswd;
-    }
-
 }
