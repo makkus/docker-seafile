@@ -27,7 +27,8 @@ RUN apt-get update && apt-get install -y \
 		libreoffice-script-provider-python \
 		ttf-wqy-microhei \
 		ttf-wqy-zenhei \
-		xfonts-wqy
+    xfonts-wqy \
+    wget
 
 RUN pip install boto
 		
@@ -35,7 +36,7 @@ RUN ulimit -n 30000
 
 # script to download seafile
 RUN mkdir -p /opt/scripts/
-COPY seafile-pro-server_4.2.4_x86-64.tar.gz /tmp/seafile-pro-server_4.2.4_x86-64.tar.gz
+#COPY seafile-pro-server_5.0.5_x86-64.tar.gz /tmp/seafile-pro-server_5.0.5_x86-64.tar.gz
 ADD setup-seafile.sh /usr/local/bin/setup-seafile
 ADD setup-seafile.expect /usr/local/bin/setup-seafile.expect
 RUN chmod 755 /usr/local/bin/setup-seafile

@@ -38,7 +38,10 @@ I prepared templates for the user of both *nginx* and *apache*. For the latter t
 
 ### Using seafile professional
 
-There is an option to use the professional version of seafile instead of the community one. This is not really streamlined yet. Basically, you need to download the seafile professional tarball, put it into the seafile-pro directory, change the build directory to seafile-pro in docker-compose.yml, and change the seafile version in there to the one you downloaded. Check out *docker-compose.yml.example.pro.nginx* for a working example.
+There is an option to use the professional version of seafile instead of the community one.
+
+To use that, copy the **docker-compose.yml.example.pro.nginx** example file as **docker-compose.yml**, then check your license email for your download link, which will have a token at the end of it ( https://cloud.seafile.de/d/TOKEN/ ). Take not of that, and put it as TOKEN value in the *seafile* section. Also make sure to specify the right seafile-pro version.
+
 
 ### Create initial *docker-compose.yml*
 

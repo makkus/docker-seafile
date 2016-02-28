@@ -101,6 +101,7 @@ then
 						then 
                 echo "SITE_ROOT = '/${SEAFILE_SITE_ROOT}/'" >> /opt/seafile/conf/seahub_settings.py
                 echo "SITE_BASE = 'https://${SEAFILE_HOSTNAME}/${SEAFILE_SITE_ROOT}'" >> /opt/seafile/conf/seahub_settings.py
+                echo "LOGIN_URL = '/${SEAFILE_SITE_ROOT}/accounts/login/'" >> /opt/seafile/conf/seahub_settings.py
 						fi
 
 						# other settings

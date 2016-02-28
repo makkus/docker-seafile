@@ -9,7 +9,7 @@ set db_user [lindex $argv 3]
 set db_pass [lindex $argv 4]
 
 
-spawn "/opt/seafile/seafile-server-$version/setup-seafile-mysql.sh"
+spawn "/opt/seafile/seafile-pro-server-$version/setup-seafile-mysql.sh"
 
 expect "Press ENTER to continue"
 

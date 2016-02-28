@@ -33,7 +33,7 @@ seafile:
     SEAFILE_HOSTNAME: "localhost.home"
     SEAFILE_SITE_ROOT: "seafile"
     SEAFILE_SITE_TITLE: "My Seafile"
-
+    TOKEN: "YOUR_TOKEN"
 
 
 nginx:
