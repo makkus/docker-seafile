@@ -42,7 +42,7 @@ to the file */etc/hosts*. Use **localhost.home** as the hostname when asked, and
     (accept insecure host cert when browser warns)
 
 ## TODO
- - fix backup & upgrade scripts
+ - make sure backup & upgrade scripts work, which they probably do not, fix if necessary
  - scripts to restore from backup
  - more configuration options upfront
  - configurable cron jobs
