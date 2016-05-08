@@ -1,11 +1,11 @@
-FROM ubuntu:16.04
+FROM phusion/baseimage:0.9.18
 MAINTAINER Markus Binsteiner <makkus@gmail.com>
 
-ENV UID=1000
-ENV GID=1000
+ENV PUID=1000
+ENV PGID=1000
 
-RUN groupadd -o -g ${GID} seafile
-RUN useradd seafile -o -d /opt/seafile -s /bin/bash -u ${UID} -g ${GID}
+RUN groupadd -o -g ${PGID} seafile
+RUN useradd seafile -o -d /opt/seafile -s /bin/bash -u ${PUID} -g ${PGID}
 
 # get an up-to-date package repo
 RUN apt update
@@ -40,6 +40,8 @@ COPY setup-seafile.sqlite.sh /opt/seafile/setup-seafile.sqlite.sh
 RUN chmod +x /opt/seafile/setup-seafile.sqlite.sh
 COPY setup-seafile.sqlite.expect /opt/seafile/setup-seafile.sqlite.expect
 RUN chmod +x /opt/seafile/setup-seafile.sqlite.expect
+COPY seafile_init.sh /opt/seafile/seafile_init.sh
+RUN chmod +x /opt/seafile/seafile_init.sh
 
 RUN chown -R seafile:seafile /var/log/seafile
 RUN chown -R seafile:seafile /opt/seafile
@@ -52,3 +54,5 @@ EXPOSE 8000
 
 USER seafile
 WORKDIR /opt/seafile
+
+CMD ["/opt/seafile/seafile_init.sh"]

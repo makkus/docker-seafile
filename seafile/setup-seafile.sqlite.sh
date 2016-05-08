@@ -2,6 +2,17 @@
 
 set -e
 
+PUID=${PUID:-1000}
+PGID=${PGID:-1000}
+
+if [ ! "$(id -u seafile)" -eq "$PUID" ]; then usermod -o -u "$PUID" seafile ; fi
+if [ ! "$(id -g seafile)" -eq "$PGID" ]; then groupmod -o -g "$PGID" seafile ; fi
+
+chown -R seafile:seafile /seafile
+chown -R seafile:seafile /opt/seafile
+chown -R seafile:seafile /var/log/seafile
+
+
 # check this is run as the seafile user
 if [ "$(id -u)" -eq "0" ]; then
    echo "This script must be run as user 'seafile'" 1>&2
@@ -62,21 +73,26 @@ declare -a properties=("EMAIL_USE_TLS"
 
 
 
-echo "Downloading seafile, version ${SEAFILE_VERSION}"
 if [ ! -f ${SEAFILE_TAR_PATH} ]
 then
+    echo "Downloading seafile, version ${SEAFILE_VERSION}"
     mkdir -p /opt/seafile/temp
 		cd /opt/seafile/temp && rm -f *
 
 		curl -L -O "https://bintray.com/artifact/download/seafile-org/seafile/${SEAFILE_TAR_FILE}"
     mkdir -p /seafile/packages
     mv /opt/seafile/temp/${SEAFILE_TAR_FILE} ${SEAFILE_TAR_PATH}
+    rm -f /seafile/packages/seafile-current.tar.gz
+    ln -s ${SEAFILE_TAR_PATH} /seafile/packages/seafile-current.tar.gz
     chown -R seafile:seafile ${SEAFILE_TAR_PATH}
+    echo "Download finished"
 fi
 
 if [ ! -d ${SEAFILE_PATH} ]
 then
-    tar xzf ${SEAFILE_TAR_PATH} -C /opt/seafile
+    echo "Extracting seafile app."
+    # TODO: check for version when container volume deleted
+    tar xzf /seafile/packages/seafile-current.tar.gz  -C /opt/seafile
     chown -R seafile:seafile ${SEAFILE_PATH}
 fi
 
@@ -174,6 +190,12 @@ then
 
 fi
 
+echo "Checking links to config directories and files..."
+
+if [ ! -e /opt/seafile/seafile-server-latest ]
+then
+    ln -s ${SEAFILE_PATH} /opt/seafile/seafile-server-latest
+fi
 
 if [ ! -e /opt/seafile/ccnet ]
 then
@@ -205,3 +227,4 @@ then
     ln -s /seafile/data/custom /opt/seafile/seafile-server-latest/seahub/media/custom
 fi
 
+echo "All setup, ready to start..."
