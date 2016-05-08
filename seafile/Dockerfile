@@ -1,60 +1,54 @@
-FROM	phusion/baseimage:0.9.16
-MAINTAINER	Markus Binsteiner <makkus@gmail.com>
+FROM ubuntu:16.04
+MAINTAINER Markus Binsteiner <makkus@gmail.com>
 
-CMD ["/sbin/my_init"]
+ENV UID=1000
+ENV GID=1000
 
-# Seafile dependencies and system configuration
-RUN apt-get update && apt-get install -y \
-		python2.7 \
-		python-setuptools \
-		python-simplejson \
-		python-imaging \
-		sqlite3 \
-		python-mysqldb \
-		python-memcache \
-		mysql-client \
-		socat \
-		zile \ 
-		bup \
-		expect \
-		python-flup
+RUN groupadd -o -g ${GID} seafile
+RUN useradd seafile -o -d /opt/seafile -s /bin/bash -u ${UID} -g ${GID}
 
-RUN ulimit -n 30000
+# get an up-to-date package repo
+RUN apt update
 
-# script to download seafile
-RUN mkdir -p /opt/scripts/
-ADD setup-seafile.sh /usr/local/bin/setup-seafile
-ADD setup-seafile.expect /usr/local/bin/setup-seafile.expect
-RUN chmod 755 /usr/local/bin/setup-seafile
-RUN chmod 755 /usr/local/bin/setup-seafile.expect
-ADD upgrade-seafile.sh /usr/local/bin/upgrade-seafile
-ADD create_db.sql /opt/scripts/create_db.sql
-ADD garbage_collection.sh /opt/scripts/seafile-gc
-ADD backup.sh /opt/scripts/seafile-backup
-ADD custom /tmp/seafile-custom
-# create seafile & backup user
-ADD ids.lst /tmp/ids.lst
-ADD prepare-user.sh /tmp/prepare-user.sh
-RUN /tmp/prepare-user.sh
+# bootstrap ansible
+RUN apt install -y python-setuptools python-dev libffi-dev libssl-dev git build-essential
+RUN easy_install pip
+RUN pip2 install ansible
 
-ADD backup_schedule.sh /etc/cron.d/backup_schedule.sh
-ADD garbage_collection_schedule.sh /etc/cron.d/garbage_collection_schedule.sh
+RUN mkdir -p /etc/ansible
+RUN sh -c 'echo "[local]\n127.0.0.1   ansible_connection=local\n" |  tee /etc/ansible/hosts'
 
-EXPOSE 10001 12001 8000 8080 8082
+# dev tools
+RUN apt install -y zile
+
+# build deps
+RUN apt install -y expect curl
+
+RUN apt install -y wget python2.7 libpython2.7 python-setuptools python-imaging python-ldap
+# option sqlite
+RUN apt install sqlite3
+
+ENV SEAFILE_VERSION=5.1.1
 
 RUN mkdir -p /var/log/seafile
-RUN chown -R seafile /var/log/seafile
+RUN mkdir /seafile
 
-# Seafile daemons
-RUN mkdir -p /etc/service/seafile_services
-ADD seafile_services.sh /etc/service/seafile_services/run
-ADD seafile_services_stop.sh /etc/service/seafile_services/finish
-RUN mkdir -p /etc/seafile/service/seafile /etc/seafile/service/seahub
-ADD seafile.sh /etc/seafile/service/seafile/run
-ADD seafile_stop.sh /etc/seafile/service/seafile/finish
-ADD seahub.sh /etc/seafile/service/seahub/run
-ADD seahub_stop.sh /etc/seafile/service/seahub/finish
-RUN chown -R seafile /etc/seafile
+RUN mkdir -p /opt/seafile
+RUN mkdir -p /seafile/data/custom
 
-# Clean up for smaller image
-RUN apt-get clean && rm -rf /var/lib/apt/lists/* /var/tmp/*
+COPY setup-seafile.sqlite.sh /opt/seafile/setup-seafile.sqlite.sh
+RUN chmod +x /opt/seafile/setup-seafile.sqlite.sh
+COPY setup-seafile.sqlite.expect /opt/seafile/setup-seafile.sqlite.expect
+RUN chmod +x /opt/seafile/setup-seafile.sqlite.expect
+
+RUN chown -R seafile:seafile /var/log/seafile
+RUN chown -R seafile:seafile /opt/seafile
+RUN chown -R seafile:seafile /seafile
+
+VOLUME /seafile
+VOLUME /var/log/seafile
+
+EXPOSE 8000
+
+USER seafile
+WORKDIR /opt/seafile

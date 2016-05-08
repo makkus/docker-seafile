@@ -1,0 +1,32 @@
+#!/usr/bin/expect
+
+set version [lindex $argv 0]
+set name [lindex $argv 1]
+set host [lindex $argv 2]
+
+set timeout -1
+set send_slow {1 .1}
+spawn /opt/seafile/seafile-server-${version}/setup-seafile.sh
+match_max 100000
+expect -exact ""
+sleep .1
+send -s -- "\r"
+expect -exact "\[server name\]: "
+sleep .1
+send -s -- "${name}\r"
+expect -exact "\[This server's ip or domain\]: "
+sleep .1
+send -s -- "${host}\r"
+expect -exact "\[default: /opt/seafile/seafile-data \] "
+sleep .1
+send -s -- "/opt/seafile/seafile-data\r"
+expect -exact "\[default: 8082 \] "
+sleep .1
+send -s -- "8082\r"
+expect -exact ""
+sleep .1
+send -s -- "\r"
+expect -exact ""
+sleep .1
+send -s -- "\r"
+expect eof
