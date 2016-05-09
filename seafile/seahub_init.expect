@@ -1,0 +1,29 @@
+#!/usr/bin/expect -f
+
+set email [lindex $argv 0]
+set password [lindex $argv 1]
+
+set force_conservative 0  ;# set to 1 to force conservative mode even if
+        ;# script wasn't run conservatively originally
+if {$force_conservative} {
+  set send_slow {1 .1}
+  proc send {ignore arg} {
+    sleep .1
+    exp_send -s -- $arg
+  }
+}
+
+set timeout -1
+set send_slow {1 .1}
+spawn /opt/seafile/seafile-server-latest/seahub.sh start
+match_max 100000
+expect -exact "\[ admin email \] "
+sleep .1
+send -s -- "${email}\r"
+expect -exact "\[ admin password \] "
+sleep .1
+send -s -- "${password}\r"
+expect -exact "\[ admin password again \] "
+sleep .1
+send -s -- "${password}\r"
+expect eof

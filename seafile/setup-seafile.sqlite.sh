@@ -23,6 +23,8 @@ fi
 [ -z "${SEAFILE_HOSTNAME}"] && SEAFILE_HOSTNAME="localhost"
 [ -z "${SEAFILE_SITE_ROOT}"] && SEAFILE_SITE_ROOT=""
 [ -z "${SEAFILE_SITE_TITLE}"] && SEAFILE_SITE_TITLE="My Seafile"
+[ -z "${SEAFILE_ADMIN_EMAIL}"] && SEAFILE_ADMIN_EMAIL="seafile@localhost.home"
+[ -z "${SEAFILE_ADMIN_PASSWORD}"] && SEAFILE_ADMIN_PASSWORD="password123"
 
 SEAFILE_TAR_FILE="seafile-server_${SEAFILE_VERSION}_x86-64.tar.gz"
 SEAFILE_TAR_PATH="/seafile/packages/${SEAFILE_TAR_FILE}"
@@ -110,7 +112,8 @@ then
     then
         # start seafile interactively so admin account can be created
         ${SEAFILE_PATH}/seafile.sh start
-        ${SEAFILE_PATH}/seahub.sh start
+
+        /opt/seafile/seahub_init.expect ${SEAFILE_ADMIN_EMAIL} ${SEAFILE_ADMIN_PASSWORD}
         ${SEAFILE_PATH}/seahub.sh stop
         ${SEAFILE_PATH}/seafile.sh stop
 

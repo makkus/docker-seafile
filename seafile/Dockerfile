@@ -42,6 +42,8 @@ COPY setup-seafile.sqlite.expect /opt/seafile/setup-seafile.sqlite.expect
 RUN chmod +x /opt/seafile/setup-seafile.sqlite.expect
 COPY seafile_init.sh /opt/seafile/seafile_init.sh
 RUN chmod +x /opt/seafile/seafile_init.sh
+COPY seahub_init.expect /opt/seafile/seahub_init.expect
+RUN chmod +x /opt/seafile/seahub_init.expect
 
 RUN chown -R seafile:seafile /var/log/seafile
 RUN chown -R seafile:seafile /opt/seafile
