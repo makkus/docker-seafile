@@ -1,0 +1,25 @@
+---
+# vars file for container-create
+container_groups:
+  - { name: www-data, gid: 1001 }
+
+container_users:
+  - { name: www-data, home: /home/www-data, shell: /bin/bash, uid: 1001, group: seafile }
+
+create_directories: []
+
+
+executables: []
+
+dev_dependencies: []
+
+build_dependencies: []
+
+dependencies:
+  - nginx
+  - python-flup
+
+directory_attributes:
+  - { path: /var/lib/www-data, user: www-data, group: seafile }
+
+startup_scripts: []

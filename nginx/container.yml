@@ -1,0 +1,8 @@
+---
+- hosts: all
+
+  vars_files:
+    - default_vars.yml
+
+  roles:
+    - role: container-create
