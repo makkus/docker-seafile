@@ -18,29 +18,15 @@ RUN pip2 install -U ansible
 RUN mkdir -p /etc/ansible
 RUN sh -c 'echo "[local]\n127.0.0.1   ansible_connection=local\n" |  tee /etc/ansible/hosts'
 
-# RUN groupadd -o -g ${PGID} seafile
-# RUN useradd seafile -o -d /opt/seafile -s /bin/bash -u ${PUID} -g ${PGID}
+COPY app_init.sh /app_init.sh
 
 COPY ansible /ansible
 RUN chmod +x /ansible/init.sh
-RUN mkdir -p /tmp/files
-COPY files /tmp/files
+RUN chmod +x /ansible/install.sh
 
-RUN rsync -a /tmp/files/ /
-RUN rm -r /tmp/files
+COPY default /ansible/install/default
 
-COPY app_init.sh /app_init.sh
-
-WORKDIR /ansible
-
-RUN ansible-playbook container.yml -t container:executables
-RUN ansible-playbook container.yml -t container:directories
-RUN ansible-playbook container.yml -t container:groups
-RUN ansible-playbook container.yml -t container:users
-RUN ansible-playbook container.yml -t container:dev
-RUN ansible-playbook container.yml -t container:build
-RUN ansible-playbook container.yml -t container:dependencies
-RUN ansible-playbook container.yml -t container:directory-attributes
+RUN /ansible/install.sh
 
 VOLUME /seafile
 VOLUME /var/log/seafile
