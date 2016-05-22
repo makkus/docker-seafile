@@ -1,0 +1,3 @@
+- src: https://github.com/makkus/ansible-workstation
+  version: master
+  name: workstation

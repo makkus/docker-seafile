@@ -1,0 +1,48 @@
+---
+# vars file for container-create
+container_groups:
+  - { name: seafile, gid: 1000 }
+
+container_users:
+  - { name: seafile, home: /opt/seafile, shell: /bin/bash, uid: 1000, group: seafile }
+
+create_directories:
+  - /var/log/seafile
+  - /seafile
+  - /opt/seafile
+  - /seafile/data/custom
+
+executables:
+  - /opt/seafile/setup-seafile.sqlite.sh
+  - /opt/seafile/setup-seafile.sqlite.expect
+  - /opt/seafile/seafile_init.sh
+  - /opt/seafile/seahub_init.expect
+  - /etc/service/seafile/run
+  - /etc/service/seafile/finish
+  - /etc/service/seahub/run
+  - /etc/service/seahub/finish
+
+dev_dependencies:
+  - zile
+  - telnet
+  - mlocate
+
+build_dependencies: []
+
+dependencies:
+  - python2.7
+  - libpython2.7
+  - python-setuptools
+  - python-imaging
+  - python-ldap
+  - sqlite3
+  - expect
+  - curl
+
+directory_attributes:
+  - { path: /var/log/seafile, user: seafile, group: seafile }
+  - { path: /opt/seafile, user: seafile, group: seafile }
+  - { path: /seafile, user: seafile, group: seafile }
+
+startup_scripts:
+  - { script: /opt/seafile/setup-seafile.sqlite.sh, user: seafile, working_dir: /opt/seafile }

@@ -1,0 +1,3 @@
+#!/bin/sh
+
+/opt/seafile/seafile-server-latest/seahub.sh stop >>/var/log/seafile/seahub.log 2>&1

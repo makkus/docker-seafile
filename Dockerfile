@@ -4,8 +4,7 @@ MAINTAINER Markus Binsteiner <makkus@gmail.com>
 ENV PUID=1000
 ENV PGID=1000
 
-RUN groupadd -o -g ${PGID} seafile
-RUN useradd seafile -o -d /opt/seafile -s /bin/bash -u ${PUID} -g ${PGID}
+ENV SEAFILE_VERSION=5.1.1
 
 # get an up-to-date package repo
 RUN apt update
@@ -13,48 +12,43 @@ RUN apt update
 # bootstrap ansible
 RUN apt install -y python-setuptools python-dev libffi-dev libssl-dev git build-essential
 RUN easy_install pip
-RUN pip2 install ansible
+RUN pip2 install -U setuptools
+RUN pip2 install -U ansible
 
 RUN mkdir -p /etc/ansible
 RUN sh -c 'echo "[local]\n127.0.0.1   ansible_connection=local\n" |  tee /etc/ansible/hosts'
 
-# dev tools
-RUN apt install -y zile
+# RUN groupadd -o -g ${PGID} seafile
+# RUN useradd seafile -o -d /opt/seafile -s /bin/bash -u ${PUID} -g ${PGID}
 
-# build deps
-RUN apt install -y expect curl
+COPY ansible /ansible
+RUN chmod +x /ansible/init.sh
+RUN mkdir -p /tmp/files
+COPY files /tmp/files
 
-RUN apt install -y wget python2.7 libpython2.7 python-setuptools python-imaging python-ldap
-# option sqlite
-RUN apt install sqlite3
+RUN rsync -a /tmp/files/ /
+RUN rm -r /tmp/files
 
-ENV SEAFILE_VERSION=5.1.1
+COPY app_init.sh /app_init.sh
 
-RUN mkdir -p /var/log/seafile
-RUN mkdir /seafile
+WORKDIR /ansible
 
-RUN mkdir -p /opt/seafile
-RUN mkdir -p /seafile/data/custom
-
-COPY setup-seafile.sqlite.sh /opt/seafile/setup-seafile.sqlite.sh
-RUN chmod +x /opt/seafile/setup-seafile.sqlite.sh
-COPY setup-seafile.sqlite.expect /opt/seafile/setup-seafile.sqlite.expect
-RUN chmod +x /opt/seafile/setup-seafile.sqlite.expect
-COPY seafile_init.sh /opt/seafile/seafile_init.sh
-RUN chmod +x /opt/seafile/seafile_init.sh
-COPY seahub_init.expect /opt/seafile/seahub_init.expect
-RUN chmod +x /opt/seafile/seahub_init.expect
-
-RUN chown -R seafile:seafile /var/log/seafile
-RUN chown -R seafile:seafile /opt/seafile
-RUN chown -R seafile:seafile /seafile
+RUN ansible-playbook container.yml -t container:executables
+RUN ansible-playbook container.yml -t container:directories
+RUN ansible-playbook container.yml -t container:groups
+RUN ansible-playbook container.yml -t container:users
+RUN ansible-playbook container.yml -t container:dev
+RUN ansible-playbook container.yml -t container:build
+RUN ansible-playbook container.yml -t container:dependencies
+RUN ansible-playbook container.yml -t container:directory-attributes
 
 VOLUME /seafile
 VOLUME /var/log/seafile
 
 EXPOSE 8000
+EXPOSE 80
+EXPOSE 443
+EXPOSE 2015
 
-USER seafile
-WORKDIR /opt/seafile
-
-CMD ["/opt/seafile/seafile_init.sh"]
+WORKDIR /ansible
+CMD ["/ansible/init.sh"]

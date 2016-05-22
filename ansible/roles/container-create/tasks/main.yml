@@ -1,0 +1,80 @@
+---
+# tasks file for container-create
+- name: create required folders
+  file: path={{ item }} state=directory
+  with_items:
+    - "{{ create_directories }}"
+  tags:
+    - container:directories
+
+- name: ensure executable
+  file: path={{ item }} state=file mode=a+x
+  with_items:
+    - "{{ executables }}"
+  tags:
+    - container:executables
+
+- name: add groups
+  group: name={{ item.name }}
+         state=present
+         gid={{ item.gid }}
+  with_items:
+    - "{{ container_groups }}"
+  tags:
+    - container:groups
+
+- name: add users
+  user: name={{ item.name }}
+        uid={{ item.uid }}
+        group={{ item.group }}
+        home={{ item.home }}
+  with_items:
+    - "{{ container_users }}"
+  tags:
+    - container:users
+
+
+- name: install dev dependencies
+  apt: pkg={{item}} state=installed
+  with_items:
+    - "{{ dev_dependencies }}"
+  become: yes
+  tags:
+    - container:dev
+
+- name: install build dependencies
+  apt: pkg={{ item }} state=installed
+  with_items:
+    - "{{ build_dependencies }}"
+  become: yes
+  tags:
+    - container:build
+
+- name: install app dependencies
+  apt: pkg={{ item }} state=installed
+  with_items:
+    - "{{ dependencies }}"
+  become: yes
+  tags:
+    - container:dependencies
+
+- name: directory attributes
+  file: path={{ item.path }}
+        group={{ item.group }}
+        owner={{ item.user }}
+        recurse=yes
+  with_items:
+    - "{{ directory_attributes }}"
+  tags:
+    - container:directory-attributes
+
+- name: container startup scripts
+  shell: "{{ item.script }}"
+  args:
+    chdir: "{{ item.working_dir }}"
+  become: yes
+  become_user: "{{ item.user }}"
+  with_items:
+    - "{{ startup_scripts }}"
+  tags:
+    - container:startup-scripts
