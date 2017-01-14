@@ -4,3 +4,4 @@ docker-compose.yml
 ids.lst
 seahub_settings_template.py
 seafile/custom
+nginx/certs/

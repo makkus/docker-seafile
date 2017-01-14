@@ -25,8 +25,8 @@ seafile:
   volumes_from:
     - data
   environment:
-    ENABLE_BACKUP: False
-    ENABLE_GARBAGE_COLLECTION: False
+    ENABLE_BACKUP: 'False'
+    ENABLE_GARBAGE_COLLECTION: 'False'
     SEAFILE_VERSION: 5.0.5
     SEAFILE_DB_USER: seafile
     SEAFILE_DB_PASSWORD: password
